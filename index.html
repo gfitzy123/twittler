@@ -3,25 +3,79 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="timeago.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+
   </head>
   <body>
+      <button id = "newTweetsButton"> New Tweets </button>
+
+ 
+      
     <script>
 
       $(document).ready(function(){
+      
         var $body = $('body');
         $body.html('');
 
+        var title = $("<h1> Garrett's Twittler </h1>")
+        var loader = $("<button id=" + "loader" + ">" + "Load More Tweets" + "</button>");
+        $("head").append(title);
+        $("body").append(title);
+        $("body").append(loader)
         var index = streams.home.length - 1;
+
+
+
+          var addtext = "<div id=" + "openModal" + " " + "class="  + "modalDialog>" + "\
+                        <div>\
+                        <a href=" + "#close" + " " + "title=" + "Close" + " " + "class=" + "close>X</a>\
+                        <h2>Modal Box</h2> "   +
+                        
+                        "</div>\
+                        </div>"
+
+
+
+            // The code below is an attempt to create an event when the <href> tag is clicked upon, that will filter all of the user's tweets and append them to the body of the modal. Still haven't figured it out.              
+           $("a href").click(function() {
+            var name = $(this).text().replace("@", '');
+            $("div[data-handle]").filter("[data-handle=" + name + "]").appendTo($("h2"))
+            });           
+            
+            $("body").append(addtext);
+           
+
+    
+
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          $tweet.text(' : ' + tweet.message + jQuery.timeago(tweet.created_at));;
+          $("body").append("<div data-handle=" + tweet.user + ">" + "<a href=" + "#openModal" + ">" + "@" + tweet.user + "</a>" + ' : ' + tweet.message + jQuery.timeago(tweet.created_at) + "</div>")
           index -= 1;
         }
 
-      });
-
+        $("#loader").click(function() {
+            var index = streams.home.length - 1;
+                   while(index >= 0) {
+          var tweet = streams.home[index];
+          var $tweet = $('<div></div>');
+          $tweet.text(' : ' + tweet.message + jQuery.timeago(tweet.created_at));;
+          $("body").append("<div data-handle=" + tweet.user + ">" + "<a href=" + "#openModal" + ">" + "@" + tweet.user + "</a>" + ' : ' + tweet.message + jQuery.timeago(tweet.created_at) + "</div>")
+          index -= 1;
+            }
+          });
+});
+         
+   
     </script>
+
   </body>
+
+  
+
 </html>
+
+
